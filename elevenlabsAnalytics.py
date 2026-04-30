@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 # ─── Page Configuration ──────────────────────────────────────────
 st.set_page_config(
     page_title="ElevenLabs Call Analytics", 
-    page_icon="🤖", 
+    page_icon="", 
     layout="wide", 
     initial_sidebar_state="collapsed"
 )
@@ -49,7 +49,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # ─── Header ──────────────────────────────────────────────────────
-st.title("🤖 ElevenLabs Call Analytics")
+st.title("ElevenLabs Call Analytics")
 st.markdown("Detailed breakdown of AI Agent call volumes, status distribution, and LLM costs.")
 st.markdown("---")
 
@@ -97,7 +97,7 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 colA, colB = st.columns([1, 1.2])
 
 with colA:
-    st.subheader("📊 Agent Call Status")
+    st.subheader("Agent Call Status")
     status_counts = df["status"].value_counts().reset_index()
     status_counts.columns = ["Status", "Count"]
     
@@ -124,7 +124,7 @@ with colA:
     st.plotly_chart(fig1, use_container_width=True)
 
 with colB:
-    st.subheader("🤖 Most Active Agents (Call Volume)")
+    st.subheader("Most Active Agents (Call Volume)")
     agent_counts = df["agent_id"].value_counts().head(10).reset_index()
     agent_counts.columns = ["Agent ID", "Count"]
     agent_counts = agent_counts.iloc[::-1]  # Reverse for proper horizontal display
@@ -158,7 +158,7 @@ with colB:
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ─── Row 2: Line Chart (Full Width) ──────────────────────────────
-st.subheader("💰 Daily LLM Cost by Top Agents (USD)")
+st.subheader("Daily LLM Cost by Top Agents (USD)")
 
 top_cost_series = df.groupby("agent_id")["llm_cost"].sum().nlargest(5)
 top_cost_agents = top_cost_series.index
