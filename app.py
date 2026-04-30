@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 # ─── Page Configuration ──────────────────────────────────────────
 st.set_page_config(
     page_title="Call Data Analysis", 
-    page_icon="📞", 
+    page_icon="", 
     layout="wide", 
     initial_sidebar_state="collapsed"
 )
@@ -49,7 +49,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # ─── Header ──────────────────────────────────────────────────────
-st.title("📞 Twilio Call Data Analysis")
+st.title("Twilio Call Data Analysis")
 st.markdown("Detailed breakdown of call volumes, status distribution, and associated costs over the last 30 days.")
 st.markdown("---")
 
@@ -85,7 +85,7 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 colA, colB = st.columns([1, 1.2])
 
 with colA:
-    st.subheader("📊 Call Status Distribution")
+    st.subheader("Call Status Distribution")
     status_counts = df["Status"].value_counts().reset_index()
     status_counts.columns = ["Status", "Count"]
     
@@ -112,7 +112,7 @@ with colA:
     st.plotly_chart(fig1, use_container_width=True)
 
 with colB:
-    st.subheader("📞 Top 10 'From' Phone Numbers")
+    st.subheader("Top 10 'From' Phone Numbers")
     from_counts = df["From"].value_counts().head(10).reset_index()
     from_counts.columns = ["From", "Count"]
     from_counts = from_counts.iloc[::-1]  # Reverse for proper horizontal display
@@ -146,7 +146,7 @@ with colB:
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ─── Row 2: Line Chart (Full Width) ──────────────────────────────
-st.subheader("💰 Daily Cost by Top Phone Numbers (USD)")
+st.subheader("Daily Cost by Top Phone Numbers (USD)")
 
 top_cost_series = df.groupby("From")["Price"].sum().nlargest(5)
 top_cost_numbers = top_cost_series.index
