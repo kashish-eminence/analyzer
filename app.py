@@ -139,7 +139,8 @@ with colB:
         margin=dict(l=20, r=20, t=30, b=20),
         coloraxis_showscale=False,
         yaxis_title=None,
-        xaxis_title="Number of Calls"
+        xaxis_title="Number of Calls",
+        text="Testing numbers: +61876660527, +61879478573",
     )
     st.plotly_chart(fig3, use_container_width=True)
 
