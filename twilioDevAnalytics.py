@@ -50,7 +50,7 @@ st.markdown("""
 
 # ─── Header ──────────────────────────────────────────────────────
 st.title("📞 Twilio Call Data Analysis")
-st.markdown("Detailed breakdown of call volumes, status distribution, and associated costs over the last 30 days.")
+st.markdown("Detailed breakdown of call volumes, status distribution, and associated costs over the last 7 days (2026-04-27 to 2026-05-03).")
 st.markdown("---")
 
 # ─── Data Loading ────────────────────────────────────────────────
