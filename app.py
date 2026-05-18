@@ -56,7 +56,7 @@ st.markdown("---")
 # ─── Data Loading ────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("last_30_days.csv")
+    df = pd.read_csv("last-weak-twilio-data.csv")
     df["Price"] = df["Price"].astype(str).str.replace('"', '').astype(float).abs()
     df["Date"] = pd.to_datetime(df["Date Created"], utc=True).dt.date
     df["From"] = df["From"].astype(str).str.replace('"', '').str.strip()
