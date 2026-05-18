@@ -56,7 +56,7 @@ st.markdown("---")
 # ─── Data Loading ────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("elevenlabs_calls_april_2026.csv")
+    df = pd.read_csv("elevenlabs_calls_last_week_2026-5-11_2026-5-17.csv")
     df["llm_cost"] = pd.to_numeric(df["llm_cost"], errors="coerce").fillna(0)
     df["call_duration"] = pd.to_numeric(df["call_duration"], errors="coerce").fillna(0)
     df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
