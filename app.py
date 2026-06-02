@@ -56,8 +56,10 @@ st.markdown("---")
 # ─── Data Loading ────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("twilio_last_month_5-1-2026_6-1-2026.csv")
+    df = pd.read_csv("data/twilio_last_month_5-1-2026_6-1-2026.csv")
     df["Price"] = df["Price"].astype(str).str.replace('"', '').astype(float).abs()
+    # Convert USD to AUD (Exchange rate: 1 USD = 1.3912 AUD as of June 2026)
+    df["Price"] = df["Price"] * 1.3912
     df["Date"] = pd.to_datetime(df["Date Created"], utc=True).dt.date
     df["From"] = df["From"].astype(str).str.replace('"', '').str.strip()
     return df
@@ -74,7 +76,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(f'<div class="metric-card"><div class="metric-value">{len(df):,}</div><div class="metric-label">Total Calls</div></div>', unsafe_allow_html=True)
 with col2:
-    st.markdown(f'<div class="metric-card"><div class="metric-value">${df["Price"].sum():.2f}</div><div class="metric-label">Total Cost (USD)</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><div class="metric-value">A${df["Price"].sum():.2f}</div><div class="metric-label">Total Cost (AUD)</div></div>', unsafe_allow_html=True)
 with col3:
     completed_pct = (df["Status"] == "Completed").mean() * 100
     st.markdown(f'<div class="metric-card"><div class="metric-value">{completed_pct:.1f}%</div><div class="metric-label">Completion Rate</div></div>', unsafe_allow_html=True)
@@ -146,7 +148,7 @@ with colB:
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ─── Row 2: Line Chart (Full Width) ──────────────────────────────
-st.subheader("Daily Cost by Top Phone Numbers (USD)")
+st.subheader("Daily Cost by Top Phone Numbers (AUD)")
 
 top_cost_series = df.groupby("From")["Price"].sum().nlargest(5)
 top_cost_numbers = top_cost_series.index
@@ -162,10 +164,10 @@ for i, num in enumerate(top_cost_numbers):
                 x=daily_cost_pivot["Date"], 
                 y=daily_cost_pivot[num], 
                 mode="lines+markers",
-                name=f"{num} (Total: ${top_cost_series[num]:.2f})",
+                name=f"{num} (Total: A${top_cost_series[num]:.2f})",
                 line=dict(width=3, color=colors[i % len(colors)]),
                 marker=dict(size=8, line=dict(width=1, color='white')),
-                hovertemplate="<b>%{data.name}</b><br>Date: %{x}<br>Cost: $%{y:.2f}<extra></extra>"
+                hovertemplate="<b>%{data.name}</b><br>Date: %{x}<br>Cost: A$%{y:.2f}<extra></extra>"
             )
         )
 
@@ -186,6 +188,6 @@ fig2.update_layout(
     margin=dict(l=20, r=20, t=60, b=20)
 )
 fig2.update_xaxes(title_text="Date", showgrid=True, gridcolor="rgba(255,255,255,0.05)")
-fig2.update_yaxes(title_text="Cost (USD)", showgrid=True, gridcolor="rgba(255,255,255,0.05)")
+fig2.update_yaxes(title_text="Cost (AUD)", showgrid=True, gridcolor="rgba(255,255,255,0.05)")
 
 st.plotly_chart(fig2, use_container_width=True)
