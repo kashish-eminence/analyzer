@@ -58,6 +58,8 @@ st.markdown("---")
 def load_data():
     df = pd.read_csv("elevenlabs_calls_last_month_2026-5-1_2026-5-31.csv")
     df["llm_cost"] = pd.to_numeric(df["llm_cost"], errors="coerce").fillna(0)
+    # Convert USD to AUD (Exchange rate: 1 USD = 1.3912 AUD as of June 2026)
+    df["llm_cost"] = df["llm_cost"] * 1.3912
     df["call_duration"] = pd.to_numeric(df["call_duration"], errors="coerce").fillna(0)
     df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
     
@@ -86,7 +88,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(f'<div class="metric-card"><div class="metric-value">{len(df):,}</div><div class="metric-label">Total AI Calls</div></div>', unsafe_allow_html=True)
 with col2:
-    st.markdown(f'<div class="metric-card"><div class="metric-value">${df["llm_cost"].sum():.2f}</div><div class="metric-label">Total LLM Cost (USD)</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><div class="metric-value">A${df["llm_cost"].sum():.2f}</div><div class="metric-label">Total LLM Cost (AUD)</div></div>', unsafe_allow_html=True)
 with col3:
     avg_duration = df["call_duration"].mean()
     st.markdown(f'<div class="metric-card"><div class="metric-value">{avg_duration:.0f}s</div><div class="metric-label">Avg. Call Duration</div></div>', unsafe_allow_html=True)
@@ -158,7 +160,7 @@ with colB:
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ─── Row 2: Line Chart (Full Width) ──────────────────────────────
-st.subheader("Daily LLM Cost by Top Agents (USD)")
+st.subheader("Daily LLM Cost by Top Agents (AUD)")
 
 top_cost_series = df.groupby("agent_id")["llm_cost"].sum().nlargest(5)
 top_cost_agents = top_cost_series.index
@@ -174,10 +176,10 @@ for i, agent in enumerate(top_cost_agents):
                 x=daily_cost_pivot["date"], 
                 y=daily_cost_pivot[agent], 
                 mode="lines+markers",
-                name=f"{agent} (Total: ${top_cost_series[agent]:.2f})",
+                name=f"{agent} (Total: A${top_cost_series[agent]:.2f})",
                 line=dict(width=3, color=colors[i % len(colors)]),
                 marker=dict(size=8, line=dict(width=1, color='white')),
-                hovertemplate="<b>%{data.name}</b><br>Date: %{x}<br>Cost: $%{y:.2f}<extra></extra>"
+                hovertemplate="<b>%{data.name}</b><br>Date: %{x}<br>Cost: A$%{y:.2f}<extra></extra>"
             )
         )
 
@@ -198,6 +200,6 @@ fig2.update_layout(
     margin=dict(l=20, r=20, t=60, b=20)
 )
 fig2.update_xaxes(title_text="Date", showgrid=True, gridcolor="rgba(255,255,255,0.05)")
-fig2.update_yaxes(title_text="Cost (USD)", showgrid=True, gridcolor="rgba(255,255,255,0.05)")
+fig2.update_yaxes(title_text="Cost (AUD)", showgrid=True, gridcolor="rgba(255,255,255,0.05)")
 
 st.plotly_chart(fig2, use_container_width=True)
