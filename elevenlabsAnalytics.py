@@ -56,7 +56,7 @@ st.markdown("---")
 # ─── Data Loading ────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("elevenlabs_calls_last_month_2026-5-1_2026-5-31.csv")
+    df = pd.read_csv("elevenlabs_calls_last_month_2026-6-1_2026-6-30.csv")
     df["llm_cost"] = pd.to_numeric(df["llm_cost"], errors="coerce").fillna(0)
     # Convert USD to AUD (Exchange rate: 1 USD = 1.3912 AUD as of June 2026)
     df["llm_cost"] = df["llm_cost"] * 1.3912
