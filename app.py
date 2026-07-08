@@ -56,7 +56,7 @@ st.markdown("---")
 # ─── Data Loading ────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("twilio_last_month_5-1-2026_6-1-2026.csv")
+    df = pd.read_csv("twilio_last_month_data_6-1-2026_6-30-2026.csv")
     df["Price"] = df["Price"].astype(str).str.replace('"', '').astype(float).abs()
     # Convert USD to AUD (Exchange rate: 1 USD = 1.3912 AUD as of June 2026)
     df["Price"] = df["Price"] * 1.3912
